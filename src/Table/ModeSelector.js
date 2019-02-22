@@ -7,8 +7,8 @@ export default props => {
 
     return (
         <div className="buttons">
-            <button className="btn" onClick={() => props.onSelect(smallData)}>Маленький набор данных</button>
-            <button className="btn" onClick={() => props.onSelect(bigData)}>Большой набор данных</button>
+            <button className="mode-btn" onClick={() => props.onSelect(smallData)}>Маленький набор данных</button>
+            <button className="mode-btn" onClick={() => props.onSelect(bigData)}>Большой набор данных</button>
         </div>
     )
 

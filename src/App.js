@@ -7,6 +7,7 @@ import DetailRowView from './Table/DetailRowView';
 import ModeSelector from './Table/ModeSelector';
 import _ from 'lodash'; //для сортировки данных
 import ReactPaginate from 'react-paginate' //для отображения по 50 элементов на странице
+import TableSearch from './Table/TableSearch'
 
 class App extends Component {
 
@@ -14,10 +15,11 @@ class App extends Component {
     isModeSelected: false,
     isLoading: false,
     data: [],
-    sort: 'asc', //'desc'
-    sortField: 'id',
+    sort: 'asc', //'desc' направление сортировки
+    sortField: 'id', //поле сортировки по умолчанию
     row: null,
     currentPage: 0,
+    search: '',
   };
 
   async downloadData(link) {
@@ -64,9 +66,27 @@ class App extends Component {
 
   )
 
+  searchHandler = search => {
+    // console.log(search)
+    this.setState({search, currentPage: 0}) //сбрасываем текущую страницу, чтобы поиск шел по всем данным
+  }
+
+  getFilteredData() {
+    const {data, search} = this.state
+
+    if (!search) {
+      return data
+    }
+
+    return data.filter(item => {
+      return item['firstName'].toLowerCase().includes(search.toLowerCase())
+        || item['lastName'].toLowerCase().includes(search.toLowerCase())
+        || item['email'].toLowerCase().includes(search.toLowerCase())
+    })
+  }
+
   render() {
     const pageSize = 50;
-    const displayData = _.chunk(this.state.data, pageSize)[this.state.currentPage]
     if (!this.state.isModeSelected) {
       return (
         <div className="container">
@@ -74,17 +94,25 @@ class App extends Component {
         </div>
       )
     }
+
+    const filteredData = this.getFilteredData()
+    const pageCount = Math.ceil(filteredData.length / pageSize)
+    const displayData = _.chunk(filteredData, pageSize)[this.state.currentPage]
+   
     return (
-<div className="container">
+      <div className="container">
       {
         this.state.isLoading 
         ? <Loader /> 
-        : <Table 
-          data = {displayData} 
-          onSort = {this.onSort}
-          sort = {this.state.sort}
-          sortField = {this.state.sortField}
-          onRowSelect = {this.onRowSelect}/>
+        : <React.Fragment>
+            <TableSearch onSearch = {this.searchHandler}/>
+            <Table 
+            data = {displayData} 
+            onSort = {this.onSort}
+            sort = {this.state.sort}
+            sortField = {this.state.sortField}
+            onRowSelect = {this.onRowSelect}/>
+          </React.Fragment>
       }
       {this.state.data.length > pageSize ? 
       <ReactPaginate
@@ -92,7 +120,7 @@ class App extends Component {
           nextLabel={<img src='http://image.flaticon.com/icons/png/512/259/259418.png'></img>}
           breakLabel={'...'}
           breakClassName={'break-me'}
-          pageCount={20}
+          pageCount={pageCount}
           marginPagesDisplayed={2}
           pageRangeDisplayed={5}
           onPageChange={this.pageChangeHandler}
@@ -104,6 +132,7 @@ class App extends Component {
           nextClassName = 'page-item'
           previousLinkClassName = 'page-link'
           nextLinkClassName = 'page-link'
+          forcePage = {this.state.currentPage}
         /> : null }
             {
         this.state.row ? <DetailRowView person={this.state.row} /> : null

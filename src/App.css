@@ -37,7 +37,7 @@
   height: 50px;
   margin: 100px auto;
 }
-.btn {
+.mode-btn {
   background-color: #d3d0d0;
   border: 1px solid rgb(87, 87, 87);
   border-radius: 5px;
@@ -47,7 +47,7 @@
 }
 .dataTable {
   width: 700px;
-  margin: 100px auto 0;
+  margin: 25px auto 0;
 }
 .table {
   border-collapse: collapse;
@@ -92,6 +92,7 @@ img {
 .page-item a,
 .break-me a{
   display: inline-block;
+  border-radius: 3px;
   text-align: center;
   width: 30px;
   height: 30px;
@@ -108,4 +109,31 @@ img {
 .page-item:not(.active) a:hover,
 .break-me a:hover {
   background-color: #ddd;
+}
+.search {
+  margin: 10px auto;
+  width: 300px;
+  padding: 5px;
+  text-align: center;
+}
+.form-control {
+ margin-right: 10px;
+ border: 0;
+ outline: none; 
+ border-bottom: 1px solid #4CAF50;
+}
+
+.form-control:focus {
+  border-bottom: 2px solid #4CAF50;
+}
+.btn {
+  display: inline-block;
+  width: 50px;
+  height: 20px;
+  border-radius: 3px;
+  background-color: #4CAF50;
+  color: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  border: 0;
+  
 }
