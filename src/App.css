@@ -45,4 +45,39 @@
   height: 50px;
   margin-right: 20px;
 }
+.dataTable {
+  width: 700px;
+  margin: 100px auto 0;
+}
+.table {
+  border-collapse: collapse;
+  border: 1px dashed grey;
+}
 
+.table th,
+.table td {
+  width: 120px;
+  border: 1px dashed grey;
+}
+.table th {
+  border-bottom: 1px solid grey;
+}
+.table small {
+  color: #000;
+}
+img {
+  width: 10px;
+  height: 10px;
+}
+.detailRow {
+  border: 1px solid black;
+  width: 300px;
+  margin: 10px auto;
+  padding: 5px;
+}
+.detailRow textarea {
+  resize: none;
+  width: 280px;
+  height: 110px;
+  
+}
