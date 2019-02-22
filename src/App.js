@@ -5,7 +5,8 @@ import Loader from './Loader/Loader';
 import Table from './Table/Table';
 import DetailRowView from './Table/DetailRowView';
 import ModeSelector from './Table/ModeSelector';
-import _ from 'lodash';
+import _ from 'lodash'; //для сортировки данных
+import ReactPaginate from 'react-paginate' //для отображения по 50 элементов на странице
 
 class App extends Component {
 
@@ -16,6 +17,7 @@ class App extends Component {
     sort: 'asc', //'desc'
     sortField: 'id',
     row: null,
+    currentPage: 0,
   };
 
   async downloadData(link) {
@@ -31,12 +33,12 @@ class App extends Component {
   onSort = sortField => {
     // console.log(sortField)
     const cloneData = this.state.data.concat(); //копия массива
-    const sortType = this.state.sort === 'asc' ? 'desc' : 'asc';//определить направление сортировки
-    const orderedData = _.orderBy(cloneData, sortField, sortType);//получим отсортированные данные
+    const sort = this.state.sort === 'asc' ? 'desc' : 'asc';//определить направление сортировки
+    const data = _.orderBy(cloneData, sortField, sort);//получим отсортированные данные
     //меняем состояние компонента this.setState
     this.setState({
-      data: orderedData,
-      sort: sortType,
+      data,
+      sort,
       sortField
     })
 
@@ -56,7 +58,15 @@ class App extends Component {
     this.downloadData(link)
   }
 
+  pageChangeHandler = ({selected}) => (
+    // console.log(page)
+    this.setState({currentPage: selected})
+
+  )
+
   render() {
+    const pageSize = 50;
+    const displayData = _.chunk(this.state.data, pageSize)[this.state.currentPage]
     if (!this.state.isModeSelected) {
       return (
         <div className="container">
@@ -70,12 +80,31 @@ class App extends Component {
         this.state.isLoading 
         ? <Loader /> 
         : <Table 
-          data = {this.state.data} 
+          data = {displayData} 
           onSort = {this.onSort}
           sort = {this.state.sort}
           sortField = {this.state.sortField}
           onRowSelect = {this.onRowSelect}/>
       }
+      {this.state.data.length > pageSize ? 
+      <ReactPaginate
+          previousLabel={<img src='http://image.flaticon.com/icons/png/512/259/259444.png'></img>}
+          nextLabel={<img src='http://image.flaticon.com/icons/png/512/259/259418.png'></img>}
+          breakLabel={'...'}
+          breakClassName={'break-me'}
+          pageCount={20}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={this.pageChangeHandler}
+          containerClassName={'pagination'}
+          activeClassName={'active'}
+          pageClassName = 'page-item'
+          pageLinkClassName = 'page-link'
+          previousClassName = 'page-item'
+          nextClassName = 'page-item'
+          previousLinkClassName = 'page-link'
+          nextLinkClassName = 'page-link'
+        /> : null }
             {
         this.state.row ? <DetailRowView person={this.state.row} /> : null
       }

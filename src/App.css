@@ -81,3 +81,31 @@ img {
   height: 110px;
   
 }
+.pagination {
+  list-style: none;
+  text-align: center;
+}
+.page-item,
+.break-me {
+  display: inline-block;
+}
+.page-item a,
+.break-me a{
+  display: inline-block;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  margin: 3px;
+  line-height: 26px;
+  font-size: 16px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+.active a{
+  background-color: #4CAF50;
+  color: white;
+}
+.page-item:not(.active) a:hover,
+.break-me a:hover {
+  background-color: #ddd;
+}
